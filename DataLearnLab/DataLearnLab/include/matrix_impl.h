@@ -516,6 +516,17 @@ inline Matrix<Type> operator+( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 	Matrix<Type> tmp( A1 );
 	return tmp += A2;
 }
+/// \brief 重载'+', 矩阵v1各元素加对应矩阵v2各元素系数
+/// \param v1 矩阵v1
+/// \param v2 矩阵v2
+template<typename Type>
+vector<Type> operator+( const vector<Type> &v1, const vector<Type> &v2 )
+{
+	vector<Type> tmp(v1.size());
+	for( int i=0; i<(v1.size()); i++)
+		tmp[i] = v1[i] + v2[i];
+	return tmp;
+}
 /// \brief 重载'-', 矩阵A各元素减系数
 /// \param A 矩阵A
 /// \param x 系数
@@ -596,7 +607,7 @@ template<typename Type>
 vector<Type> operator*( const Type &x, const vector<Type> &v )
 {
 	vector<Type> tmpv(v.size());
-	for( int i=0; i<v.size(); i++)	
+	for( int i=0; i< (v.size()); i++)	
 	{
 		tmpv[i] = x*v[i];
 	}
@@ -728,6 +739,14 @@ inline Matrix<Type> elemMult( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 {
 	Matrix<Type> tmp( A1 );
 	return tmp *= A2;
+}
+template<typename Type>
+vector<Type> elemMult( const vector<Type> &v1, const vector<Type> &v2 )
+{
+	vector<Type> tmp( v1.size() );
+	for( int i=0; i<(v1.size()); i++)
+		tmp[i] = v1[i]*v2[i];
+	return tmp;
 }
 /// \brief 矩阵A1乘矩阵A2
 /// \param A1 矩阵

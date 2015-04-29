@@ -102,8 +102,10 @@ namespace matrixlab
     Matrix<Type> operator+( const Matrix<Type>&, const Type& );
     template<typename Type>
     Matrix<Type> operator+( const Type&, const Matrix<Type>& );
-   template<typename Type>
+    template<typename Type>
     Matrix<Type> operator+( const Matrix<Type>&, const Matrix<Type>& );
+	template<typename Type>
+    vector<Type> operator+( const vector<Type>&, const vector<Type>& );
     template<typename Type>
     Matrix<Type> operator-( const Matrix<Type>&, const Type& );
     template<typename Type>
@@ -155,6 +157,8 @@ namespace matrixlab
 	
     template<typename Type>
     Matrix<Type> elemMult( const Matrix<Type>&, const Matrix<Type>& );
+	template<typename Type>
+    vector<Type> elemMult( const vector<Type>&, const vector<Type>& );
     template<typename Type>
     Matrix<Type> elemDivd( const Matrix<Type>&, const Matrix<Type>& );
     template<typename Type>

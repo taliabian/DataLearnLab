@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include <vector>
+#include <vector>  
 #include "include\matrix.h"
 #include "include\Perceptron.h"
 
@@ -48,11 +48,10 @@ int main()
 	cout << "5st: enter the alph0: "<<endl;
 	for( i=0; i<tsize; i++)
 		cin >> alph0[i];
+
 	Per = Perceptron<Type>( w0, b0, tsize, fsize, rate, alph0 );
 	Per.setalph0( alph0 );
 	Per.dual_Perceptron( x, y, alph0);
 	cout << "alph: "<< Per.getalph();
-	cout << "w: "<< Per.getw();
-	cout << "b: "<< Per.getb() <<endl;
 	return 0;
 }

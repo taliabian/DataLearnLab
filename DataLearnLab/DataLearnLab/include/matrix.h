@@ -200,8 +200,8 @@ namespace matrixlab
     template<typename Type> Type norm( const Matrix<complex<Type> >& );
     template<typename Type> void swap( Matrix<Type>&, Matrix<Type>& );
     template<typename Type> vector<Type> sum( const Matrix<Type>& );
-    template<typename Type> vector<Type> min( const Matrix<Type>& );
-    template<typename Type> vector<Type> max( const Matrix<Type>& );
+    template<typename Type> vector<Type> Min( const Matrix<Type>& );
+    template<typename Type> vector<Type> Max( const Matrix<Type>& );
     template<typename Type> vector<Type> mean( const Matrix<Type>& );
 	template<typename Type> Data_Pos<Type> FindMaxandPos( const Matrix<Type>& );
 	template<typename Type> Data_Pos<Type> FindMinandPos( const Matrix<Type> & );

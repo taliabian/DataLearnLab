@@ -111,6 +111,7 @@ void Perceptron<Type>::basic_Perceptron( Matrix<Type> x, vector<int> y )
 	{
 		for( i=0; i<tnum; i++)
 		{
+			vector<Type> t = x.getRow(i);
 			tmp = trMult( w, x.getRow(i) ) + b;
 			if( tmp*y[i] <= Type(0) )
 				break;

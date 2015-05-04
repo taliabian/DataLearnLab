@@ -1111,7 +1111,7 @@ vector<Type> sum( const Matrix<Type> &A )
 /// \param A 矩阵
 /// \return 向量
 template <typename Type>
-vector<Type> min( const Matrix<Type> &A )
+vector<Type> Min( const Matrix<Type> &A )
 {
 	int m = A.rows();
 	int n = A.cols();
@@ -1133,7 +1133,7 @@ vector<Type> min( const Matrix<Type> &A )
 /// \param A 矩阵
 /// \return 向量
 template <typename Type>
-vector<Type> max( const Matrix<Type> &A )
+vector<Type> Max( const Matrix<Type> &A )
 {
 	int m = A.rows();
 	int n = A.cols();

@@ -149,6 +149,10 @@ namespace matrixlab
 	Matrix<Type> CopyFromMatrix( const Matrix<Type> &A, int row1, int col1, int row2, int col2 );
 	template<typename Type>
 	void Vector2Vector( const vector<Type> &v, vector<Type> &v1);
+	template<typename Type>
+	Matrix<Type> getMatrixFromCols( const Matrix<Type> &A, int col1, int col2 );
+	template<typename Type>
+	Matrix<Type> getMatrixFromRows( const Matrix<Type> &A, int row1, int row2 );
 
     template<typename Type>
     Matrix<Type>& optMult( const Matrix<Type>&, const Matrix<Type>&, Matrix<Type>& );

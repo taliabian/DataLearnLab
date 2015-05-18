@@ -1465,3 +1465,22 @@ void Vector2Vector( const vector<Type> &v, vector<Type> &v1)
 	for( int i=0; i<v.size(); i++)
 		v1[i] = v[i];
 }
+
+template<typename Type>
+Matrix<Type> getMatrixFromCols( const Matrix<Type> &A, int col1, int col2 )
+{
+	Matrix<Type> tmpMat( A.rows(), col2-col1+1 );
+	for( int i=0; i<A.rows(); i++)
+		for( int j=0; j <= col2-col1 ; j++)
+			tmpMat[i][j] = A[i][j+col1];
+	return tmpMat;
+}
+template<typename Type>
+Matrix<Type> getMatrixFromRows( const Matrix<Type> &A, int row1, int row2 )
+{
+	Matrix<Type> tmpMat( row2-row1+1, A.cols() );
+	for( int i=0; i<=row2-row1; i++)
+		for( int j=0; j < A.cols() ; j++)
+			tmpMat[i][j] = A[i+row1][j];
+	return tmpMat;
+}

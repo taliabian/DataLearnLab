@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "include\matrix.h"
 #include "include\Perceptron.h"
+#include "include\kdTree.h"
 
 using namespace std;
 using namespace matrixlab;
@@ -237,6 +238,16 @@ void button_run_clicked()
 	y2 = -(x2 * w0[0] + b0) / w0[1];
 	/// »®Ïß
 	DrawLine(window_dc, x1 * XLEN ,y1 * YLEN, x2 * XLEN, y2 * YLEN,colors[mode+1]);
+
+	double data[6][2] = {{2,3},{5,4},{9,6},{7,2},{8,1},{4,7}};
+	Matrix<Type> x(6,2);
+	for( int i=0; i<6; i++)
+		for( int j=0; j<2; j++)
+			x[i][j] = data[i][j];
+	vector<Type> y(6);
+	kdTree<Type> kd( x, y);
+	kd.CreateKDTree( );
+
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)

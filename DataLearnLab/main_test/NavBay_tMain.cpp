@@ -41,7 +41,6 @@ int main()
 	while( !file.eof() )
 	{
 		file >> strtmp1;
-		file >> strtmp2;
 		str_c.push_back( strtmp1 );
 	}
 	str_c.pop_back( );
@@ -51,108 +50,100 @@ int main()
 	/// 停用词设定
 	string StopWords[] = {"的","我们","要","自己","之","将","“","”", 
 						  "，","（","）","后","应","到","某","个","是",
-						  "位","新","一","两","在","中","或","有","更","好"," "};
+						  "位","新","一","两","在","中","或","有","更",
+						  "好", "：","？","。"};
 	stringstream ss;
-	string str, filestr;
-	for( int i=0; i<str_c.size(); i++)
+	string str, filestr, filestr1;
+	
+	vector<vector<string> > x( str_c.size()/2 ); //训练样本数据
+	vector<string> c; // 训练样本分类数据
+	string xx; // 测试样本数据
+
+	/// 测试样本数据
+	file.open( path+"test.txt", ios::in);
+	if( !file.good() )
 	{
+		cout << "cannot open the test file \n";
+		return -1;
+	}
+	file >> xx;
+	xx = NLPIR_ParagraphProcess( xx.c_str() ,0); // 测试样本分词
+	int len = sizeof(StopWords)/sizeof(string);
+	xx = Ignore_Key_string( xx, StopWords, len ); // 测试样本过滤 
+	file.close();
+	string s;
+	filestr.clear();
+ 	for( int i=0; i<str_c.size(); i = i+2)
+	{
+		c.push_back( str_c[i] );
 		for( int j=0; j<10; j++)
 		{
+			ss.clear();
 			ss << 10+j;
 			ss >> str;
-			path = path + str_c[i] + "\\" + str +  ".txt";
+			path =  path + str_c[i] + "\\" + str +  ".txt";
 			file.open( path, ifstream::in);
+			if( !file.good() )
+			{
+				cout << "cannot open the test file \n";
+				return -1;
+			}
 			while(!file.eof())
 			{
-				file >> filestr;
-				const char * ch = NLPIR_ParagraphProcess( filestr.c_str(),0); // 样本分词
-				cout << ch <<endl;
-				string s = ch;
-				int len = sizeof(StopWords)/sizeof(string);
-				s = Ignore_Key_string( s, StopWords, len );
-				
-				cout << s<<endl;
-				/*cout <<s.substr(0,2)<<endl;
-				cout <<s.substr(2,2)<<endl;
-				cout <<s.substr(4,2)<<endl;*/
+				file >> filestr1;
+			    filestr = filestr + filestr1;
 			}
-
+			s = NLPIR_ParagraphProcess( filestr.c_str(),0); // 训练样本分词
+			s = Ignore_Key_string( s, StopWords, len ); // 训练样本过滤 
+			x[i/2].push_back( s );
+			file.close();
+			filestr.clear();
+			path = "SougoMini\\Sample\\";	
 		}
 	}
-/*
-	path = "Sogoumini\\test.txt";	
-	file.open( path, ifstream::in );
-	
-	/// 停用词设定
-	string StopWords[] = {"的","我们","要","自己","之","将","“","”", 
-						  "，","（","）","后","应","到","某","后","个",
-						  "是","位","新","一","两","在","中","或","有",
-						  "更","好"," "};
-	/// 测试样本文本过滤
-	int len = sizeof(StopWords)/sizeof(string);
-	string nTest_str = equalsIgnoreCase( path, StopWords, len );
-	cout << nTest_str <<endl;*/
-	
-	//file.close();
-	//path = "Sogoumini\\test1.txt";	
-	//file.open( path, ifstream::in );
-	//while( !file.eof() )
-	//{
-	//	file >> strtmp1;
-	//	cout << strtmp1<<endl;
-	//}
-	//file.close();
 	NLPIR_Exit();
+	NavBay_Basic nb( x, c, xx);
+	string feature = nb.Classify();
+	cout << feature ;
 	system("pause");
 	return 0;
 }
 /// 字符串过滤
 string Ignore_Key_string( string splitstr, string *StopWords, int len )
 {
-	string strtmp1, strtmp2, strtmp3;	
-	unsigned char ch1, ch2;
-	int flag = 0;
-	strtmp1 = splitstr;
-	for( int j=0; j < len; j++) //过滤第j类词
+	string str1, str2, str3;
+	str1 = splitstr;
+	for( int j=0; j<len; j ++)
 	{
-		for( int i=0; i < strtmp1.size(); )
+		for( int i=0; i<str1.size()-1;)
 		{
-			// 判断是否为中文
-			ch1 = strtmp1[i];
-			if( i+1 < strtmp1.size() )
-				ch2 = strtmp1[i+1];
-			if( ch1>0x80 && ch2>0x80) // 中文
-			{
-				flag = 1;
-				int n = 0, m = 0;
-				for( m =0 ; m < StopWords[j].size(); m = m+2)
+				int size = StopWords[j].size();
+				int m=0;
+				while( m <size && (i+m) < str1.size())
 				{
-					strtmp2 = strtmp1.substr( i, 2 ); 
-					if( strtmp2.compare( StopWords[j].substr(m,2)) == 0 ) //判断是否匹配
+					if( (unsigned char )str1[i+m] < 0x81)
 					{
-						n = n+2;
-						i = i+2;
+						m++;
+						break;
 					}
+					m++;
 				}
-				if( n != 0 ) // 匹配
-					i = i-2;
-				else// 未匹配上,加入新字符串
-					strtmp3 = strtmp3 + strtmp1.substr( i ,2);
-			}
-			else // 不是中文也加入新字符串
-			{
-				strtmp3 = strtmp3 + strtmp1.substr( i,1);
-			}
-			if( 1 == flag )
-				i = i+2;
-			else 
-				i = i+1;
-			flag = 0;
+				if( m == size )  //中文个数匹配
+				{
+					str3 = str1.substr( i, m );
+					if( str3.compare( StopWords[j]) != 0) //中文未匹配上,进入新string
+						str2 = str2 + str3;
+					i = i + m;
+				}
+				else{
+						str2 = str2 + str1.substr(i,m);
+						i = i+m;
+					}
 		}
-		strtmp1 = strtmp3;
-		strtmp3.clear();
+		str1 = str2;
+		str2.clear();
 	}
-	return strtmp1;
+	return str1;
 }
 /// 本文本过滤
 string Ignore_Key_file_string( string filename, string *StopWords, int len )
@@ -205,7 +196,6 @@ string Ignore_Key_file_string( string filename, string *StopWords, int len )
 			strtmp3.clear();
 		}
 	}
-	//cout << strtmp1<<endl;
 	file.close();
 	return strtmp1;
 }
